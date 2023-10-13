@@ -7,16 +7,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import TokenContextProvider from './context/tokenContext';
-import { QueryClient, QueryClientProvider } from 'react-query';
-const queryClient = new QueryClient();
+// import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
+import store from './redux/strore';
+// const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <TokenContextProvider>
-      <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <TokenContextProvider>
+      {/* <QueryClientProvider client={queryClient}> */}
         <App />
-      </QueryClientProvider>
-    </TokenContextProvider>
+      {/* </QueryClientProvider> */}
+      </TokenContextProvider>
+    </Provider>
   </React.StrictMode>
 );
 

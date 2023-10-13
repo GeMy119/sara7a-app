@@ -1,28 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import avatar from '../../img/avatar.png';
-import axios from 'axios';
+// import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMessages } from '../../redux/apiSlice';
 
 function Profile() {
+    let dispatch = useDispatch()
+    let { messages } = useSelector((state) => state.apiCall)
     const [show, setShow] = React.useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const host = window.location.origin;
     const token = localStorage.getItem('token');
     const decoded = jwtDecode(token);
-    const fetchMessages = async () => {
-        const response = await axios.get('https://sara7aiti.onrender.com/api/v1/message', {
-            headers: {
-                token,
-            },
-        });
-        return response.data.allMessages;
-    };
-    const { data: allMessages, isLoading } = useQuery('messages', fetchMessages);
-
+    // const fetchMessages = async () => {
+    //     const response = await axios.get('https://sara7aiti.onrender.com/api/v1/message', {
+    //         headers: {
+    //             token,
+    //         },
+    //     });
+    //     return response.data.allMessages;
+    // };
+    // const { data: allMessages, isLoading } = useQuery('messages', fetchMessages);
+    useEffect(() => { 
+        console.log(messages)
+    }, [messages])
+    useEffect(() => {
+        dispatch(getMessages())
+    }, [])
     return (
         <>
             <div className="container text-center py-5 my-5 text-center">
@@ -49,27 +58,28 @@ function Profile() {
             </div>
             <div className="container text-center my-5 text-center">
                 <div className="row">
-                    {isLoading ? (
+                    {/* {isLoading ? (
                         <div className="col-md-12">
                             <div className="card py-5">
                                 <p>Loading messages...</p>
                             </div>
                         </div>
-                    ) : allMessages?.length === 0 ? (
-                        <div className="col-md-12">
-                            <div className="card py-5">
-                                <p>You don't have any messages...</p>
-                            </div>
-                        </div>
-                    ) : (
-                        allMessages.map((ele) => (
-                            <div key={ele._id} className="col-md-12 mb-4">
+                    ) */}
+                        { messages?.length === 0 ? (
+                            <div className="col-md-12">
                                 <div className="card py-5">
-                                    <p>{ele.messageContent}</p>
+                                    <p>You don't have any messages...</p>
                                 </div>
                             </div>
-                        ))
-                    )}
+                        ) : (
+                            messages.map((ele) => (
+                                <div key={ele._id} className="col-md-12 mb-4">
+                                    <div className="card py-5">
+                                        <p>{ele.messageContent}</p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                 </div>
             </div>
         </>

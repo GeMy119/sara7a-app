@@ -12,8 +12,8 @@ function Register() {
     const navigate = useNavigate()
     function register(values) {
         setIsLoading(true)
-        let { data } = axios.post(`https://sara7aiti.onrender.com/api/v1/user`, values).then((data) => {
-            if (data.data.message == "Added") {
+        axios.post(`https://sara7aiti.onrender.com/api/v1/user`, values).then((data) => {
+            if (data.data.message === "Added") {
                 setIsLoading(false)
                 navigate("/login")
             }
